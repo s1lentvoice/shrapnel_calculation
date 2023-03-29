@@ -27,6 +27,7 @@ int main() {
 
 	missile = MakeDataMissile(temp);
 	target = MakeDataTarget(temp);
+	std::cout << __cplusplus << std::endl;
 	
 	
 }

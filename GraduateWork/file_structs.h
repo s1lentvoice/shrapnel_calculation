@@ -2,6 +2,8 @@
 #ifndef FSTRUCTS_H
 #define FSTRUCTS_H
 
+#include <cmath>
+
 struct coordinates {
 	double x;
 	double y;
@@ -139,5 +141,8 @@ struct raw_data {
 	int i;
 };
 
+double GetVelocityValue(velocity T) {
+	return std::sqrt(std::pow(T.x, 2) + std::pow(T.y, 2) + std::pow(T.z, 2));
+}
 
 #endif
