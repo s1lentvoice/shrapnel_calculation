@@ -6,7 +6,7 @@
 
 
 struct target_data {
-	obj_n_sys_coordinates coord_n_obj;
+	coordinates coord_n_obj;
 
 	double v_obj = 64.44;
 	double path_obj;

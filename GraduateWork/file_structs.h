@@ -2,6 +2,19 @@
 #ifndef FSTRUCTS_H
 #define FSTRUCTS_H
 
+struct coordinates {
+	double x;
+	double y;
+	double z;
+};
+
+struct velocity {
+	double x;
+	double y;
+	double z;
+};
+
+
 struct missile_n_sys_coordinates {
 	double x;
 	double y;
