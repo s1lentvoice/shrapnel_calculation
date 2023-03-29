@@ -144,5 +144,5 @@ struct raw_data {
 double GetVelocityValue(velocity T) {
 	return std::sqrt(std::pow(T.x, 2) + std::pow(T.y, 2) + std::pow(T.z, 2));
 }
-
+//to_do_next
 #endif

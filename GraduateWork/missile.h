@@ -49,7 +49,7 @@ std::vector <fragment> MakeFragments(missile_data T, int N) {
 		x = T.r * std::sin(phi);
 		z = T.r * std::cos(phi);
 	}
-	//to_do_next
+	//to_do_next_first
 	return res;
 }
 
