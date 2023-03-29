@@ -142,7 +142,13 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="structs.h" />
+    <ClInclude Include="data_making.h" />
+    <ClInclude Include="file_structs.h" />
+    <ClInclude Include="missile.h" />
+    <ClInclude Include="target.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
