@@ -40,16 +40,18 @@ raw_data MakeRawData(std::string filename) {
 missile_data MakeDataMissile(raw_data T) {
 	missile_data res;
 
-	res.mis_coord_n.x = T.mis_coord_n.x;
-	res.mis_coord_n.y = T.mis_coord_n.y;
-	res.mis_coord_n.z = T.mis_coord_n.z;
+	res.coord_n.x = T.mis_coord_n.x;
+	res.coord_n.y = T.mis_coord_n.y;
+	res.coord_n.z = T.mis_coord_n.z;
 
-	res.mis_v_proj_n.x = T.mis_v_proj_n.x;
-	res.mis_v_proj_n.y = T.mis_v_proj_n.y;
-	res.mis_v_proj_n.z = T.mis_v_proj_n.z;
+	res.v_proj_n.x = T.mis_v_proj_n.x;
+	res.v_proj_n.y = T.mis_v_proj_n.y;
+	res.v_proj_n.z = T.mis_v_proj_n.z;
 
 	res.yaw_angle = T.yaw_angle;
 	res.pitch_angle = T.pitch_angle;
+
+	res.r = 0.5;
 
 	return res;
 }

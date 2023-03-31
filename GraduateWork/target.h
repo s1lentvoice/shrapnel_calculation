@@ -8,7 +8,7 @@
 struct target_data {
 	coordinates coord_n_obj;
 
-	double v_obj = 64.44;
+	double v_obj;
 	double path_obj;
 	double pitch_obj;
 };
