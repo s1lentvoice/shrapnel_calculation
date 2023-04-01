@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="data_making.h" />
     <ClInclude Include="file_structs.h" />
+    <ClInclude Include="functions.h" />
     <ClInclude Include="missile.h" />
     <ClInclude Include="target.h" />
   </ItemGroup>

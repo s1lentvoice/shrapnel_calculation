@@ -10,7 +10,7 @@
 #include <cmath>
 #include <numbers>
 #include "file_structs.h"
-
+#include "functions.h"
 
 
 struct missile_data {
@@ -30,24 +30,22 @@ struct fragment {
 	double mass;
 };
 
-coordinates MakeRotation(coordinates T, double phi, double theta) {
-	coordinates res;
+velocity MakeFragmentVelocity(coordinates T, double VeloValue) {
+	velocity res;
+	double length;
+	double multiplier;
 
-	phi = phi * std::numbers::pi_v<double> / 180.0;
-	theta = theta * std::numbers::pi_v<double> / 180.0;
+	length = std::sqrt(std::pow(T.x, 2) + std::pow(T.y, 2) + std::pow(T.z, 2));
+	multiplier = VeloValue / length;
 
-	res.z = std::cos(phi) * T.z - std::sin(phi) * T.x;
-	res.x = std::sin(phi) * T.z + std::cos(phi) * T.x;
-
-	res.x = std::cos(theta) * T.x - std::sin(theta) * T.y;
-	res.y = std::sin(theta) * T.x + std::cos(theta) * T.y;
+	res = T * multiplier;
 
 	return res;
 }
 
-std::vector <fragment> MakeFragments(missile_data T, int N) {
+std::vector <fragment> MakeFragments(missile_data M, target_data T, double InitialSpeed, int N) {
 	coordinates coord;
-	velocity velo;
+	velocity velo, additional, target;
 	double phi;
 	std::vector <fragment> res;
 	fragment frag;
@@ -57,20 +55,41 @@ std::vector <fragment> MakeFragments(missile_data T, int N) {
 	std::uniform_real_distribution<double> distibY(-0.35, 0.35);
 	std::uniform_real_distribution<double> distibPhi(0.0, 1.0);
 
+	additional = M.v_proj_n;
+	
+	target.x = T.v_obj;
+	target.y = 0.0;
+	target.z = 0.0;
+
+	target = MakeRotationVelo(target, T.path_obj, T.pitch_obj);
+
+	additional += target;
+
+
 	for (int i = 0; i < N; ++i) {
 		frag.mass = 0.1;
 
 		coord.y = distibY(generator);
 		phi = 2 * std::numbers::pi_v<double> *distibPhi(generator);
-		coord.x = T.r * std::sin(phi);
-		coord.z = T.r * std::cos(phi);
+		coord.x = M.r * std::sin(phi);
+		coord.z = M.r * std::cos(phi);
 
-		coord = MakeRotation(coord, T.yaw_angle, T.pitch_angle);
+		coord = MakeRotation(coord, M.yaw_angle, M.pitch_angle);
+		velo = MakeFragmentVelocity(coord, InitialSpeed);
+		velo += additional;
 
+		frag.coord = coord;
+		frag.velo = velo;
+
+		res.push_back(frag);
 	}
-	//to_do_next_first
+
 	return res;
 }
 
+bool IsThroughTargetSurface(fragment F, coordinates basis_y) {
+	bool it = true;
+	return it;
+}
 
 #endif

@@ -8,13 +8,87 @@ struct coordinates {
 	double x;
 	double y;
 	double z;
+
+	coordinates(double x = 0.0, double y = 0.0, double z = 0.0)
+		: x(x), y(y), z(z)
+	{}
+
+	coordinates& operator= (const auto& V) {
+		x = V.x;
+		y = V.y;
+		z = V.z;
+
+		return *this;
+	}
+
+	coordinates& operator+= (const auto& V) {
+		x += V.x;
+		y += V.y;
+		z += V.z;
+
+		return *this;
+	}
 };
+
+coordinates operator+ (coordinates T1, coordinates T2) {
+	T1.x += T2.x;
+	T1.y += T2.y;
+	T1.z += T2.z;
+	
+	return T1;
+}
+
+coordinates operator* (coordinates T, double n) {
+	T.x *= n;
+	T.y *= n;
+	T.z *= n;
+
+	return T;
+}
+
 
 struct velocity {
 	double x;
 	double y;
 	double z;
+
+	velocity(double x = 0.0, double y = 0.0, double z = 0.0)
+		: x(x), y(y), z(z)
+	{}
+
+	velocity& operator= (const auto& V) {
+		x = V.x;
+		y = V.y;
+		z = V.z;
+
+		return *this;
+	}
+
+	velocity& operator+= (const auto& V) {
+		x += V.x;
+		y += V.y;
+		z += V.z;
+
+		return *this;
+	}
 };
+
+velocity operator+ (velocity T1, velocity T2) {
+	T1.x += T2.x;
+	T1.y += T2.y;
+	T1.z += T2.z;
+
+	return T1;
+}
+
+velocity operator * (velocity T, double n) {
+	T.x *= n;
+	T.y *= n;
+	T.z *= n;
+
+	return T;
+}
+
 
 
 struct missile_n_sys_coordinates {

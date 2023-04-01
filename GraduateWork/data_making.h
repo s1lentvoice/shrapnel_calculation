@@ -5,6 +5,7 @@
 #include "file_structs.h"
 #include "missile.h"
 #include "target.h"
+#include "functions.h"
 #include <fstream>
 
 raw_data MakeRawData(std::string filename) {
@@ -58,6 +59,7 @@ missile_data MakeDataMissile(raw_data T) {
 
 target_data MakeDataTarget(raw_data T) {
 	target_data res;
+	coordinates basis_x, basis_y, basis_z;
 
 	res.coord_n_obj.x = T.coord_n_obj.x;
 	res.coord_n_obj.y = T.coord_n_obj.y;
@@ -65,6 +67,27 @@ target_data MakeDataTarget(raw_data T) {
 
 	res.path_obj = T.path_obj;
 	res.pitch_obj = T.pitch_obj;
+	res.v_obj = 69.44;
+
+	basis_x.x = 1.0;
+	basis_x.y = 0.0;
+	basis_x.z = 0.0;
+
+	basis_y.x = 0.0;
+	basis_y.y = 1.0;
+	basis_y.z = 0.0;
+
+	basis_z.x = 0.0;
+	basis_z.y = 0.0;
+	basis_z.z = 1.0;
+
+	basis_x = MakeRotation(basis_x, res.path_obj, res.pitch_obj);
+	basis_y = MakeRotation(basis_x, res.path_obj, res.pitch_obj);
+	basis_z = MakeRotation(basis_z, res.path_obj, res.pitch_obj);
+
+	res.basis_x = basis_x;
+	res.basis_y = basis_y;
+	res.basis_z = basis_z;
 
 	return res;
 }
