@@ -57,14 +57,16 @@ missile_data MakeDataMissile(raw_data T) {
 	return res;
 }
 
+target_data ModifyCoords(target_data T, missile_data M) {
+	T.coord_n_obj -= M.coord_n;
+	return T;
+}
+
 target_data MakeDataTarget(raw_data T) {
 	target_data res;
 	coordinates basis_x, basis_y, basis_z;
 
-	res.coord_n_obj.x = T.coord_n_obj.x;
-	res.coord_n_obj.y = T.coord_n_obj.y;
-	res.coord_n_obj.z = T.coord_n_obj.z;
-
+	res.coord_n_obj = T.coord_n_obj;
 	res.path_obj = T.path_obj;
 	res.pitch_obj = T.pitch_obj;
 	res.v_obj = 69.44;

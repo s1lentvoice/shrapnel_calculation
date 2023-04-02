@@ -21,6 +21,10 @@ struct missile_data {
 
 	double yaw_angle;
 	double pitch_angle;
+
+	missile_data(double r = 0.0, double yaw_angle = 0.0, double pitch_angle = 0.0)
+		: r(r), yaw_angle(yaw_angle), pitch_angle(pitch_angle)
+	{}
 };
 
 struct fragment {
@@ -28,6 +32,10 @@ struct fragment {
 	velocity velo;
 
 	double mass;
+
+	fragment(double mass = 0.0)
+		: mass(mass)
+	{}
 };
 
 velocity MakeFragmentVelocity(coordinates T, double VeloValue) {
@@ -81,15 +89,25 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 		frag.coord = coord;
 		frag.velo = velo;
 
-		res.push_back(frag);
+		if (AngleBetweenVectors(frag.velo, T.basis_y) < 0.0)
+			res.push_back(frag);
 	}
 
 	return res;
 }
 
-bool IsThroughTargetSurface(fragment F, coordinates basis_y) {
-	bool it = true;
-	return it;
+coordinates PointOfImpact(fragment F, surface T) {
+	double t;
+	coordinates intersection;
+
+	t = -(T.D + T.A * F.coord.x + T.B * F.coord.y + T.C * F.coord.z) / 
+		(T.A * F.velo.x + T.B * F.velo.y + T.C * F.velo.z);
+
+	intersection.x = F.coord.x + t * F.velo.x;
+	intersection.y = F.coord.y + t * F.velo.y;
+	intersection.z = F.coord.z + t * F.velo.z;
+
+	return intersection;
 }
 
 #endif

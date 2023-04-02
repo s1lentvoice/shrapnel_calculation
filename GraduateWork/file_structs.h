@@ -28,6 +28,14 @@ struct coordinates {
 
 		return *this;
 	}
+
+	coordinates& operator-= (const auto& V) {
+		x -= V.x;
+		y -= V.y;
+		z -= V.z;
+
+		return *this;
+	}
 };
 
 coordinates operator+ (coordinates T1, coordinates T2) {
@@ -89,7 +97,16 @@ velocity operator * (velocity T, double n) {
 	return T;
 }
 
+struct surface {
+	double A;
+	double B;
+	double C;
+	double D;
 
+	surface(double A = 0.0, double B = 0.0, double C = 0.0, double D = 0.0)
+		: A(A), B(B), C(C), D(D)
+	{}
+};
 
 struct missile_n_sys_coordinates {
 	double x;
