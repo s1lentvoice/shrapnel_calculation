@@ -80,89 +80,11 @@ surface MakeTargetSurface(coordinates norm, coordinates point) {
 	return res;
 }
 
-bool HitTarget(target_data T, coordinates point) {
+bool CrossingNumberAlgo(std::vector <coordinates> polygon_vertices, coordinates point) {
 	bool res;
-	std::vector <coordinates> points;
-	coordinates base_x, base_z, temp;
 
-	base_x.x = 1.0;
-	base_x.y = 0.0;
-	base_x.z = 0.0;
+	res = true;
 
-	base_z.x = 0.0;
-	base_z.y = 0.0;
-	base_z.z = 1.0;
-
-	base_x = MakeRotation(base_x, T.path_obj, 0.0);
-	base_z = MakeRotation(base_z, T.path_obj, 0.0);
-
-	temp.x = T.coord_n_obj.x + base_z.x * 5.4 + base_x.x * 5.4;
-	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
-
-	points.push_back(temp);
-
-	temp.x = T.coord_n_obj.x + base_z.x * 5.5 + base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
-
-	points.push_back(temp);
-
-	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
-
-	points.push_back(temp);
-
-	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
-
-	points.push_back(temp);
-
-	double d1, d2, d3, d4;
-	d1 = (points[1].x - points[0].x) * (point.z - points[0].z) - (points[1].z - points[0].z) * (point.x - points[0].x);
-	d2 = (points[2].x - points[1].x) * (point.z - points[1].z) - (points[2].z - points[1].z) * (point.x - points[1].x);
-	d3 = (points[3].x - points[2].x) * (point.z - points[2].z) - (points[3].z - points[2].z) * (point.x - points[2].x);
-	d4 = (points[0].x - points[3].x) * (point.z - points[3].z) - (points[0].z - points[3].z) * (point.x - points[3].x);
-
-	if ((d1 < 0 && d2 < 0 && d3 < 0 && d4 < 0) ||
-		(d1 > 0 && d2 > 0 && d3 > 0 && d4 > 0))
-		res = true;
-	else
-		res = false;
-
-	if (!res) {
-		points.clear();
-		temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
-		temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
-
-		points.push_back(temp);
-
-		temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
-		temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
-
-		points.push_back(temp);
-
-		temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
-		temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
-
-		points.push_back(temp);
-
-		temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
-		temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
-
-		points.push_back(temp);
-
-		double d1, d2, d3, d4;
-		d1 = (points[1].x - points[0].x) * (point.z - points[0].z) - (points[1].z - points[0].z) * (point.x - points[0].x);
-		d2 = (points[2].x - points[1].x) * (point.z - points[1].z) - (points[2].z - points[1].z) * (point.x - points[1].x);
-		d3 = (points[3].x - points[2].x) * (point.z - points[2].z) - (points[3].z - points[2].z) * (point.x - points[2].x);
-		d4 = (points[0].x - points[3].x) * (point.z - points[3].z) - (points[0].z - points[3].z) * (point.x - points[3].x);
-
-		if ((d1 < 0 && d2 < 0 && d3 < 0 && d4 < 0) ||
-			(d1 > 0 && d2 > 0 && d3 > 0 && d4 > 0))
-			res = true;
-		else
-			res = false;
-	}
-	
 	return res;
 }
 

@@ -15,8 +15,10 @@ struct target_data {
 	double v_obj;
 	double path_obj;
 	double pitch_obj;
+
+	target_data(double v_obj = 0.0, double path_obj = 0.0, double pitch_obj = 0.0)
+		: v_obj(v_obj), path_obj(path_obj), pitch_obj(pitch_obj)
+	{}
 };
 
-
-//to_do_next
 #endif

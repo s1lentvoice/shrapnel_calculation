@@ -19,7 +19,7 @@ int main() {
 	target_data target;
 	raw_data temp;
 	double FragmentsInitialSpeed = 7000.0;
-	int FragmentsQuantity = 100;
+	int FragmentsQuantity = 360;
 	
 
 	std::string filename = "1.txt";
@@ -39,7 +39,7 @@ int main() {
 	int counter_near = 0;
 	int counter_miss = 0;
 
-	for (int j = 0; j < 100000; j++) {
+	for (int j = 0; j < 1000; j++) {
 		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 		counter = 0;
 		counter_near = 0;
@@ -47,7 +47,7 @@ int main() {
 		coordinates point;
 
 
-		for (int i = 0; i < fragments.size(); ++i) {
+		for (unsigned int i = 0; i < fragments.size(); ++i) {
 			counter++;
 			point = PointOfImpact(fragments[i], TargetSurface);
 			distance = PointsDistance(point, target.coord_n_obj);
@@ -61,7 +61,7 @@ int main() {
 		if (counter_near == 0)
 			counter_miss++;
 	}
-	avg_near = total_near / 100000;
+	avg_near = total_near / 1000;
 	std::cout << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
 	std::cout << "missed: " << counter_miss << std::endl << std::endl;
 

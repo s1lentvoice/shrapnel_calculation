@@ -108,6 +108,16 @@ struct surface {
 	{}
 };
 
+struct line {
+	double A;
+	double B;
+	double C;
+
+	line(double A = 0.0, double B = 0.0, double C = 0.0)
+		: A(A), B(B), C(C)
+	{}
+};
+
 struct missile_n_sys_coordinates {
 	double x;
 	double y;

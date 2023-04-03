@@ -110,4 +110,145 @@ coordinates PointOfImpact(fragment F, surface T) {
 	return intersection;
 }
 
+bool IsInRectangle(std::vector <coordinates> polygon_vertices, coordinates point) {
+	bool res;
+	double d1, d2, d3, d4;
+	
+	d1 = (polygon_vertices[1].x - polygon_vertices[0].x) * (point.z - polygon_vertices[0].z) - (polygon_vertices[1].z - polygon_vertices[0].z) * (point.x - polygon_vertices[0].x);
+	d2 = (polygon_vertices[2].x - polygon_vertices[1].x) * (point.z - polygon_vertices[1].z) - (polygon_vertices[2].z - polygon_vertices[1].z) * (point.x - polygon_vertices[1].x);
+	d3 = (polygon_vertices[3].x - polygon_vertices[2].x) * (point.z - polygon_vertices[2].z) - (polygon_vertices[3].z - polygon_vertices[2].z) * (point.x - polygon_vertices[2].x);
+	d4 = (polygon_vertices[0].x - polygon_vertices[3].x) * (point.z - polygon_vertices[3].z) - (polygon_vertices[0].z - polygon_vertices[3].z) * (point.x - polygon_vertices[3].x);
+
+	if ((d1 < 0 && d2 < 0 && d3 < 0 && d4 < 0) ||
+		(d1 > 0 && d2 > 0 && d3 > 0 && d4 > 0))
+		res = true;
+	else
+		res = false;
+
+	return res;
+}
+
+bool HitTargetBody(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+	bool res;
+	std::vector <coordinates> polygon_vertices;
+	coordinates temp;
+
+	temp.x = T.coord_n_obj.x + base_z.x * 5.4 + base_x.x * 5.4;
+	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x + base_z.x * 5.5 + base_x.x * 5.5;
+	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
+	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
+	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp);
+
+	res = IsInRectangle(polygon_vertices, point);
+
+	return res;
+}
+
+bool HitTargetWings(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+	bool res;
+	std::vector <coordinates> polygon_vertices;
+	coordinates temp;
+
+	temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
+	temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
+	temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
+	temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
+
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
+	temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
+
+	polygon_vertices.push_back(temp);
+
+	res = IsInRectangle(polygon_vertices, point);
+
+	return res;
+}
+
+bool HitTargetEmpennage(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+	bool res;
+	std::vector <coordinates> polygon_vertices;
+	coordinates temp;
+
+	temp.x = T.coord_n_obj.x - base_z.x * 3.0 - base_x.x * 3.0;
+	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp); //1
+
+	temp.x = T.coord_n_obj.x - base_z.x * 3.0 - base_x.x * 3.0;
+	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
+
+	polygon_vertices.push_back(temp); //2
+
+	temp.x = T.coord_n_obj.x - base_z.x * 3.6 - base_x.x * 3.6;
+	temp.z = T.coord_n_obj.z - base_z.z * 3.4 - base_x.z * 3.4;
+
+	polygon_vertices.push_back(temp); //3
+
+	temp.x = T.coord_n_obj.x - base_z.x * 4.2 - base_x.x * 4.2;
+	temp.z = T.coord_n_obj.z - base_z.z * 3.4 - base_x.z * 3.4;
+
+	polygon_vertices.push_back(temp); //4
+
+	temp.x = T.coord_n_obj.x - base_z.x * 4.2 - base_x.x * 4.2;
+	temp.z = T.coord_n_obj.z + base_z.z * 3.4 + base_x.z * 3.4;
+
+	polygon_vertices.push_back(temp); //5
+
+	temp.x = T.coord_n_obj.x - base_z.x * 3.6 - base_x.x * 3.6;
+	temp.z = T.coord_n_obj.z + base_z.z * 3.4 + base_x.z * 3.4;
+
+	polygon_vertices.push_back(temp); //6
+
+	//crossing number algo
+	return false;
+}
+
+bool HitTarget(target_data T, coordinates point) {
+	bool res;
+	std::vector <coordinates> points;
+	coordinates base_x, base_z, temp;
+
+	base_x.x = 1.0;
+	base_x.y = 0.0;
+	base_x.z = 0.0;
+
+	base_z.x = 0.0;
+	base_z.y = 0.0;
+	base_z.z = 1.0;
+
+	base_x = MakeRotation(base_x, T.path_obj, 0.0);
+	base_z = MakeRotation(base_z, T.path_obj, 0.0);
+
+	res = HitTargetBody(T, point, base_x, base_z);
+
+	if (!res) 
+		res = HitTargetWings(T, point, base_x, base_z);
+
+	return res;
+}
+
 #endif
