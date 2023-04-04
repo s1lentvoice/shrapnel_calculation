@@ -147,6 +147,7 @@
     <ClInclude Include="file_structs.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="missile.h" />
+    <ClInclude Include="progressbar.h" />
     <ClInclude Include="target.h" />
   </ItemGroup>
   <ItemGroup>
