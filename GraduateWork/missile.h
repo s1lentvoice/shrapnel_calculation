@@ -153,7 +153,7 @@ bool HitTargetBody(target_data T, coordinates point, coordinates base_x, coordin
 
 	polygon_vertices.push_back(temp);
 
-	res = IsInRectangle(polygon_vertices, point);
+	res = CrossingNumberAlgo(polygon_vertices, point);
 
 	return res;
 }
@@ -183,7 +183,7 @@ bool HitTargetWings(target_data T, coordinates point, coordinates base_x, coordi
 
 	polygon_vertices.push_back(temp);
 
-	res = IsInRectangle(polygon_vertices, point);
+	res = CrossingNumberAlgo(polygon_vertices, point);
 
 	return res;
 }
@@ -223,8 +223,8 @@ bool HitTargetEmpennage(target_data T, coordinates point, coordinates base_x, co
 
 	polygon_vertices.push_back(temp); //6
 
-	//crossing number algo
-	return false;
+	res = CrossingNumberAlgo(polygon_vertices, point);
+	return res;
 }
 
 bool HitTarget(target_data T, coordinates point) {
@@ -247,6 +247,9 @@ bool HitTarget(target_data T, coordinates point) {
 
 	if (!res) 
 		res = HitTargetWings(T, point, base_x, base_z);
+
+	if (!res)
+		res = HitTargetEmpennage(T, point, base_x, base_z);
 
 	return res;
 }

@@ -26,6 +26,8 @@ int main() {
 	std::string filename = "1.txt";
 	std::ofstream out("output.txt");
 	
+
+	
 	temp = MakeRawData(filename);
 
 	missile = MakeDataMissile(temp);
@@ -44,17 +46,17 @@ int main() {
 	progressbar bar(100);
 	bar.set_todo_char(" ");
 	bar.set_done_char("#");
-	
-	for (int j = 0; j < 10000; j++) {
+
+	for (int j = 0; j < 1000; j++) {
 		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
-		
+
 		counter_near = 0;
 		double distance = 0.0;
 		coordinates point;
 
 
 		for (unsigned int i = 0; i < fragments.size(); ++i) {
-			
+
 			point = PointOfImpact(fragments[i], TargetSurface);
 			distance = PointsDistance(point, target.coord_n_obj);
 			if (HitTarget(target, point))
@@ -64,18 +66,17 @@ int main() {
 		//std::cout << "[" << j + 1 << "] fragments to target surface: " << counter << std::endl
 			//<< "[" << j + 1 << "] fragments hit the target: " << counter_near << std::endl << std::endl;
 		total_near += counter_near;
-		
+
 		if (counter_near == 0)
 			counter_miss++;
-		if (counter == 100) {
+		if (counter == 10) {
 			counter = 0;
 			bar.update();
 		}
 		counter++;
 	}
-	avg_near = total_near / 10000;
+	avg_near = total_near / 1000;
 	std::cout << std::endl << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
 	std::cout << "missed: " << counter_miss << std::endl << std::endl;
-
 	//to_do_next
 }
