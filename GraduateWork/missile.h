@@ -33,8 +33,11 @@ struct fragment {
 
 	double mass;
 
-	fragment(double mass = 0.0)
-		: mass(mass)
+	bool hitXZ;
+	bool hitXY;
+
+	fragment(double mass = 0.0, bool hitXZ = false, bool hitXY = false)
+		: mass(mass), hitXZ(hitXZ), hitXY(hitXY)
 	{}
 };
 
@@ -60,7 +63,7 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::mt19937 generator(seed);
-	std::uniform_real_distribution<double> distibY(-0.35, 0.35);
+	std::uniform_real_distribution<double> distibX(-0.35, 0.35);
 	std::uniform_real_distribution<double> distibPhi(0.0, 1.0);
 
 	additional = M.v_proj_n;
@@ -77,9 +80,9 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 	for (int i = 0; i < N; ++i) {
 		frag.mass = 0.1;
 
-		coord.y = distibY(generator);
+		coord.x = distibX(generator);
 		phi = 2 * std::numbers::pi_v<double> *distibPhi(generator);
-		coord.x = M.r * std::sin(phi);
+		coord.y = M.r * std::sin(phi);
 		coord.z = M.r * std::cos(phi);
 
 		coord = MakeRotation(coord, M.yaw_angle, M.pitch_angle);
@@ -96,6 +99,7 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 	return res;
 }
 
+//Œÿ»¡ ¿
 coordinates PointOfImpact(fragment F, surface T) {
 	double t;
 	coordinates intersection;
@@ -133,7 +137,7 @@ bool HitTargetBody(target_data T, coordinates point, coordinates base_x, coordin
 	std::vector <coordinates> polygon_vertices;
 	coordinates temp;
 
-	temp.x = T.coord_n_obj.x + base_z.x * 5.4 + base_x.x * 5.4;
+	temp.x = T.coord_n_obj.x + base_z.x * 5.5 + base_x.x * 5.5;
 	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
 
 	polygon_vertices.push_back(temp);
@@ -227,7 +231,38 @@ bool HitTargetEmpennage(target_data T, coordinates point, coordinates base_x, co
 	return res;
 }
 
-bool HitTarget(target_data T, coordinates point) {
+bool HitTargetBodyXY(target_data T, coordinates point, coordinates base_x, coordinates base_y) {
+	bool res;
+	std::vector <coordinates> polygon_vertices;
+	coordinates temp;
+
+	temp.x = T.coord_n_obj.x + base_x.x * 5.5 + base_y.x * 5.5;
+	temp.y = T.coord_n_obj.y + base_x.y * 0.625 + base_y.y * 0.625;
+	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x + base_x.x * 5.5 + base_y.x * 5.5;
+	temp.y = T.coord_n_obj.y - base_x.y * 0.625 - base_y.y * 0.625;
+	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_x.x * 5.5 - base_y.x * 5.5;
+	temp.y = T.coord_n_obj.y - base_x.y * 0.625 - base_y.y * 0.625;
+	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	polygon_vertices.push_back(temp);
+
+	temp.x = T.coord_n_obj.x - base_x.x * 5.5 - base_y.x * 5.5;
+	temp.y = T.coord_n_obj.y + base_x.y * 0.625 + base_y.y * 0.625;
+	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	polygon_vertices.push_back(temp);
+
+	res = CrossingNumberAlgoXY(polygon_vertices, point);
+
+	return res;
+}
+
+//Ó¯Ë·Í‡
+bool HitTargetXZ(target_data T, coordinates point) {
 	bool res;
 	std::vector <coordinates> points;
 	coordinates base_x, base_z, temp;
@@ -240,8 +275,10 @@ bool HitTarget(target_data T, coordinates point) {
 	base_z.y = 0.0;
 	base_z.z = 1.0;
 
-	base_x = MakeRotation(base_x, T.path_obj, 0.0);
-	base_z = MakeRotation(base_z, T.path_obj, 0.0);
+	base_x = MakeRotation(base_x, T.path_obj, T.pitch_obj);
+	base_z = MakeRotation(base_z, T.path_obj, T.pitch_obj);
+
+
 
 	res = HitTargetBody(T, point, base_x, base_z);
 
@@ -251,6 +288,23 @@ bool HitTarget(target_data T, coordinates point) {
 	if (!res)
 		res = HitTargetEmpennage(T, point, base_x, base_z);
 
+	return res;
+}
+
+bool HitTargetXY(target_data T, coordinates point) {
+	bool res;
+	std::vector <coordinates> points;
+	coordinates base_x, base_y, temp;
+
+	base_x.x = 1.0;
+	base_x.y = 0.0;
+	base_x.z = 0.0;
+
+	base_y.x = 0.0;
+	base_y.y = 1.0;
+	base_y.z = 0.0;
+
+	res = HitTargetBodyXY(T, point, base_x, base_y);
 	return res;
 }
 

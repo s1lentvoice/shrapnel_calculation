@@ -20,8 +20,12 @@ int main() {
 	target_data target;
 	raw_data temp;
 	double FragmentsInitialSpeed = 7000.0;
-	int FragmentsQuantity = 360;
-	
+	int FragmentsQuantity = 1000;
+	coordinates base_x;
+
+	base_x.x = 1.0;
+	base_x.y = 0.0;
+	base_x.z = 0.0;
 
 	std::string filename = "1.txt";
 	std::ofstream out("output.txt");
@@ -31,9 +35,13 @@ int main() {
 	temp = MakeRawData(filename);
 
 	missile = MakeDataMissile(temp);
+	base_x = MakeRotation(base_x, missile.yaw_angle, missile.pitch_angle);
 	target = ModifyCoords(MakeDataTarget(temp), missile);
-	surface TargetSurface;
-	TargetSurface = MakeTargetSurface(target.basis_y, target.coord_n_obj);
+	surface TargetSurfaceZX, TargetSurfaceXY;
+	TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
+	//TargetSurfaceZX = MakeTargetSurface(base_x, missile.coord_n);
+	std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
+	TargetSurfaceXY = MakeTargetSurface(target.basis_z, target.coord_n_obj);
 
 	fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 	int total_near = 0;
@@ -41,26 +49,28 @@ int main() {
 	int counter = 1;
 	int counter_near = 0;
 	int counter_miss = 0;
+	int counter_fragments_to_surface = 0;
 
 
 	progressbar bar(100);
 	bar.set_todo_char(" ");
 	bar.set_done_char("#");
 
-	for (int j = 0; j < 1000; j++) {
+	for (int j = 0; j < 1; j++) {
 		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
-
 		counter_near = 0;
 		double distance = 0.0;
 		coordinates point;
 
-
 		for (unsigned int i = 0; i < fragments.size(); ++i) {
-
-			point = PointOfImpact(fragments[i], TargetSurface);
+			point = PointOfImpact(fragments[i], TargetSurfaceZX);
 			distance = PointsDistance(point, target.coord_n_obj);
-			if (HitTarget(target, point))
+			out << "(" << point.z << ", " << point.y << ")" << std::endl;
+			if (HitTargetXY(target, point)) {
 				counter_near++;
+				fragments[i].hitXY = true;
+			}
+				
 		}
 
 		//std::cout << "[" << j + 1 << "] fragments to target surface: " << counter << std::endl
@@ -69,14 +79,15 @@ int main() {
 
 		if (counter_near == 0)
 			counter_miss++;
-		if (counter == 10) {
+		if (counter == 1) {
 			counter = 0;
 			bar.update();
 		}
 		counter++;
 	}
-	avg_near = total_near / 1000;
+	avg_near = total_near / 100;
 	std::cout << std::endl << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
 	std::cout << "missed: " << counter_miss << std::endl << std::endl;
+	std::cout << "avg to surface: " << counter_fragments_to_surface / 10000 << std::endl << std::endl;
 	//to_do_next
 }

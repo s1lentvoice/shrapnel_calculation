@@ -52,6 +52,10 @@ double VectorModZX(auto T) {
 	return std::sqrt(std::pow(T.x, 2) + std::pow(T.z, 2));
 }
 
+double VectorModXY(auto T) {
+	return std::sqrt(std::pow(T.x, 2) + std::pow(T.y, 2));
+}
+
 //returns cos() of angle
 double AngleBetweenVectors(auto T1, auto T2) {
 	double num = T1.x * T2.x + T1.y * T2.y + T1.z * T2.z;
@@ -62,6 +66,12 @@ double AngleBetweenVectors(auto T1, auto T2) {
 double AngleBetweenVectorsZX(auto T1, auto T2) {
 	double num = T1.x * T2.x + T1.z * T2.z;
 	double denom = VectorModZX(T1) * VectorModZX(T2);
+	return num / denom;
+}
+
+double AngleBetweenVectorsXY(auto T1, auto T2) {
+	double num = T1.x * T2.x + T1.y * T2.y;
+	double denom = VectorModXY(T1) * VectorModXY(T2);
 	return num / denom;
 }
 
@@ -97,6 +107,16 @@ line MakeLine(coordinates point1, coordinates point2) {
 	res.A = point1.x - point2.x;
 	res.B = point2.z - point1.z;
 	res.C = point1.z * point2.x - point2.z * point1.x;
+
+	return res;
+}
+
+line MakeLineXY(coordinates point1, coordinates point2) {
+	line res;
+
+	res.A = point1.y - point2.y;
+	res.B = point2.x - point1.x;
+	res.C = point1.x * point2.y - point2.x * point1.y;
 
 	return res;
 }
@@ -165,6 +185,58 @@ bool DirectionIsGood(coordinates start, coordinates direction_vector, coordinate
 		return false;
 }
 
+bool PointIsGoodXY(coordinates border1, coordinates border2, coordinates point) {
+	coordinates b1 = border1;
+	coordinates b2 = border2;
+	bool res;
+
+	if (b1.x > b2.x)
+		swap(b1, b2);
+
+	if (std::abs(b1.x - b2.x) < EPS) {
+		if (b1.y > b2.y)
+			swap(b1, b2);
+		if (b1.y < point.y && point.y < b2.y)
+			res = true;
+		else
+			res = false;
+	}
+	else {
+		if (std::abs(b1.y - b2.y) < EPS) {
+			if (b1.x < point.x && point.x < b2.x)
+				res = true;
+			else
+				res = false;
+		}
+		else {
+			if (b1.x < point.x && point.x < b2.x && std::min(b1.y, b2.y) < point.y
+				&& point.y < std::max(b1.y, b2.y))
+				res = true;
+			else
+				res = false;
+		}
+	}
+	return res;
+}
+
+bool DirectionIsGoodXY(coordinates start, coordinates direction_vector, coordinates point) {
+	coordinates vector1, vector2;
+	double cos_alpha;
+
+	vector1.y = direction_vector.y - start.y;
+	vector1.x = direction_vector.x - start.x;
+
+	vector2.y = point.y - start.y;
+	vector2.x = point.x - start.x;
+
+	cos_alpha = AngleBetweenVectorsXY(vector1, vector2);
+
+	if (cos_alpha > 0.0)
+		return true;
+	else
+		return false;
+}
+
 bool CrossingNumberAlgo(std::vector <coordinates> polygon_vertices, coordinates point) {
 	bool res;
 	int crossings = 0;
@@ -186,6 +258,37 @@ bool CrossingNumberAlgo(std::vector <coordinates> polygon_vertices, coordinates 
 			intersection_point.x = -det(L1.A, L1.C, L2.A, L2.C) / zn;
 			if (PointIsGood(polygon_vertices[i], polygon_vertices[(i + 1) % polygon_vertices.size()], intersection_point)
 				&& DirectionIsGood(point, direction, intersection_point))
+				crossings++;
+		}
+	}
+
+	if (crossings % 2 == 1)
+		return true;
+	else
+		return false;
+}
+
+bool CrossingNumberAlgoXY(std::vector <coordinates> polygon_vertices, coordinates point) {
+	bool res;
+	int crossings = 0;
+	double zn = 0.0;
+	line L1, L2;
+	coordinates direction, intersection_point;
+
+	direction = point;
+	direction.x += 1.0;
+
+	L1 = MakeLineXY(point, direction);
+
+	for (unsigned int i = 0; i < polygon_vertices.size(); ++i) {
+		L2 = MakeLineXY(polygon_vertices[i], polygon_vertices[(i + 1) % polygon_vertices.size()]);
+
+		zn = det(L1.A, L1.B, L2.A, L2.B);
+		if (std::abs(zn) > EPS) {
+			intersection_point.x = -det(L1.C, L1.B, L2.C, L2.B) / zn;
+			intersection_point.y = -det(L1.A, L1.C, L2.A, L2.C) / zn;
+			if (PointIsGoodXY(polygon_vertices[i], polygon_vertices[(i + 1) % polygon_vertices.size()], intersection_point)
+				&& DirectionIsGoodXY(point, direction, intersection_point))
 				crossings++;
 		}
 	}
