@@ -84,7 +84,7 @@ target_data MakeDataTarget(raw_data T) {
 	basis_z.z = 1.0;
 
 	basis_x = MakeRotation(basis_x, res.path_obj, res.pitch_obj);
-	basis_y = MakeRotation(basis_x, res.path_obj, res.pitch_obj);
+	basis_y = MakeRotation(basis_y, res.path_obj, res.pitch_obj);
 	basis_z = MakeRotation(basis_z, res.path_obj, res.pitch_obj);
 
 	res.basis_x = basis_x;

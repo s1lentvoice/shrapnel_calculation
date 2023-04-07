@@ -87,7 +87,7 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 		coord = MakeRotation(coord, M.yaw_angle, M.pitch_angle);
 		velo = MakeFragmentVelocity(coord, InitialSpeed);
-		velo += additional;
+		//velo += additional;
 
 		frag.coord = coord;
 		frag.velo = velo;
@@ -99,7 +99,6 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 	return res;
 }
 
-//Œÿ»¡ ¿
 coordinates PointOfImpact(fragment F, surface T) {
 	double t;
 	coordinates intersection;
