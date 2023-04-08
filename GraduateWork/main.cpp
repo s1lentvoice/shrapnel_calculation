@@ -59,16 +59,16 @@ int main() {
 	bar.set_todo_char(" ");
 	bar.set_done_char("#");
 
-	for (int j = 0; j < 1; j++) {
+	for (int j = 0; j < 10000; j++) {
 		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 		counter_near = 0;
 		double distance = 0.0;
 		coordinates point;
 
 		for (unsigned int i = 0; i < fragments.size(); ++i) {
-			point = PointOfImpact(fragments[i], TargetSurfaceYZ);
+			point = PointOfImpact(fragments[i], TargetSurfaceXY);
 			distance = PointsDistance(point, target.coord_n_obj);
-			out << "(" << point.y << ", " << point.z << ")" << std::endl;
+			out << "(" << point.x << ", " << point.y << ")" << std::endl;
 			if (HitTargetXY(target, point)) {
 				counter_near++;
 				fragments[i].hitXY = true;
@@ -82,13 +82,13 @@ int main() {
 
 		if (counter_near == 0)
 			counter_miss++;
-		if (counter == 1) {
+		if (counter == 100) {
 			counter = 0;
 			bar.update();
 		}
 		counter++;
 	}
-	avg_near = total_near / 100;
+	avg_near = total_near / 10000;
 	std::cout << std::endl << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
 	std::cout << "missed: " << counter_miss << std::endl << std::endl;
 	std::cout << "avg to surface: " << counter_fragments_to_surface / 10000 << std::endl << std::endl;

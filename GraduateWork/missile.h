@@ -87,12 +87,12 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 		coord = MakeRotation(coord, M.yaw_angle, M.pitch_angle);
 		velo = MakeFragmentVelocity(coord, InitialSpeed);
-		//velo += additional;
+		velo += additional;
 
 		frag.coord = coord;
 		frag.velo = velo;
 
-		if (AngleBetweenVectors(frag.velo, T.basis_y) < 0.0)
+		if (AngleBetweenVectors(frag.velo, T.basis_z) < 0.0)
 			res.push_back(frag);
 	}
 
@@ -235,24 +235,32 @@ bool HitTargetBodyXY(target_data T, coordinates point, coordinates base_x, coord
 	std::vector <coordinates> polygon_vertices;
 	coordinates temp;
 
-	temp.x = T.coord_n_obj.x + base_x.x * 5.5 + base_y.x * 5.5;
-	temp.y = T.coord_n_obj.y + base_x.y * 0.625 + base_y.y * 0.625;
+	temp.x = 0.0 + base_x.x * 5.5 + base_y.x * 5.5;
+	temp.y = 0.0 + base_x.y * 0.625 + base_y.y * 0.625;
 	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	temp.x += T.coord_n_obj.x;
+	temp.y += T.coord_n_obj.y;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x + base_x.x * 5.5 + base_y.x * 5.5;
-	temp.y = T.coord_n_obj.y - base_x.y * 0.625 - base_y.y * 0.625;
+	temp.x = 0.0 + base_x.x * 5.5 + base_y.x * 5.5;
+	temp.y = 0.0 - base_x.y * 0.625 - base_y.y * 0.625;
 	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	temp.x += T.coord_n_obj.x;
+	temp.y += T.coord_n_obj.y;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x - base_x.x * 5.5 - base_y.x * 5.5;
-	temp.y = T.coord_n_obj.y - base_x.y * 0.625 - base_y.y * 0.625;
+	temp.x = 0.0 - base_x.x * 5.5 - base_y.x * 5.5;
+	temp.y = 0.0 - base_x.y * 0.625 - base_y.y * 0.625;
 	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	temp.x += T.coord_n_obj.x;
+	temp.y += T.coord_n_obj.y;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x - base_x.x * 5.5 - base_y.x * 5.5;
-	temp.y = T.coord_n_obj.y + base_x.y * 0.625 + base_y.y * 0.625;
+	temp.x = 0.0 - base_x.x * 5.5 - base_y.x * 5.5;
+	temp.y = 0.0 + base_x.y * 0.625 + base_y.y * 0.625;
 	temp = MakeRotation(temp, 0.0, T.pitch_obj);
+	temp.x += T.coord_n_obj.x;
+	temp.y += T.coord_n_obj.y;
 	polygon_vertices.push_back(temp);
 
 	res = CrossingNumberAlgoXY(polygon_vertices, point);
@@ -260,7 +268,6 @@ bool HitTargetBodyXY(target_data T, coordinates point, coordinates base_x, coord
 	return res;
 }
 
-//ошибка
 bool HitTargetXZ(target_data T, coordinates point) {
 	bool res;
 	std::vector <coordinates> points;
