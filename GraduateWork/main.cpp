@@ -66,14 +66,26 @@ int main() {
 		coordinates point;
 
 		for (unsigned int i = 0; i < fragments.size(); ++i) {
-			point = PointOfImpact(fragments[i], TargetSurfaceXY);
-			distance = PointsDistance(point, target.coord_n_obj);
-			out << "(" << point.x << ", " << point.y << ")" << std::endl;
-			if (HitTargetXY(target, point)) {
-				counter_near++;
-				fragments[i].hitXY = true;
+			if (fragments[i].hitZX && !fragments[i].calculated) {
+				point = PointOfImpact(fragments[i], TargetSurfaceZX);
+				//distance = PointsDistance(point, target.coord_n_obj);
+
+				//out << "(" << point.z << ", " << point.x << ")" << std::endl;
+				if (HitTargetZX(target, point)) {
+					counter_near++;
+					fragments[i].calculated = true;
+				}
 			}
-				
+			if (fragments[i].hitXY && !fragments[i].calculated) {
+				point = PointOfImpact(fragments[i], TargetSurfaceXY);
+				//distance = PointsDistance(point, target.coord_n_obj);
+
+				//out << "(" << point.z << ", " << point.x << ")" << std::endl;
+				if (HitTargetXY(target, point)) {
+					counter_near++;
+					fragments[i].calculated = true;
+				}
+			}
 		}
 
 		//std::cout << "[" << j + 1 << "] fragments to target surface: " << counter << std::endl

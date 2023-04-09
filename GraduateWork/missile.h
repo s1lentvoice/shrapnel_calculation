@@ -33,11 +33,12 @@ struct fragment {
 
 	double mass;
 
-	bool hitXZ;
+	bool hitZX;
 	bool hitXY;
+	bool calculated;
 
-	fragment(double mass = 0.0, bool hitXZ = false, bool hitXY = false)
-		: mass(mass), hitXZ(hitXZ), hitXY(hitXY)
+	fragment(double mass = 0.0, bool hitZX = false, bool hitXY = false, bool calculated = false)
+		: mass(mass), hitZX(hitZX), hitXY(hitXY), calculated(calculated)
 	{}
 };
 
@@ -93,6 +94,12 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 		frag.velo = velo;
 
 		if (AngleBetweenVectors(frag.velo, T.basis_z) < 0.0)
+			frag.hitXY = true;
+
+		if (AngleBetweenVectors(frag.velo, T.basis_y) < 0.0)
+			frag.hitZX = true;
+
+		if (frag.hitXY || frag.hitZX)
 			res.push_back(frag);
 	}
 
@@ -131,29 +138,37 @@ bool IsInRectangle(std::vector <coordinates> polygon_vertices, coordinates point
 	return res;
 }
 
-bool HitTargetBody(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+bool HitTargetBodyZX(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
 	bool res;
 	std::vector <coordinates> polygon_vertices;
 	coordinates temp;
 
-	temp.x = T.coord_n_obj.x + base_z.x * 5.5 + base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
-
+	temp.x = 0.0 + base_z.x * 5.5 + base_x.x * 5.5;
+	temp.z = 0.0 + base_z.z * 0.49 + base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x + base_z.x * 5.5 + base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
-
+	temp.x = 0.0 + base_z.x * 5.5 + base_x.x * 5.5;
+	temp.z = 0.0 - base_z.z * 0.49 - base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
-
+	temp.x = 0.0 - base_z.x * 5.5 - base_x.x * 5.5;
+	temp.z = 0.0 - base_z.z * 0.49 - base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp);
 
-	temp.x = T.coord_n_obj.x - base_z.x * 5.5 - base_x.x * 5.5;
-	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
-
+	temp.x = 0.0 - base_z.x * 5.5 - base_x.x * 5.5;
+	temp.z = 0.0 + base_z.z * 0.49 + base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp);
 
 	res = CrossingNumberAlgo(polygon_vertices, point);
@@ -161,69 +176,117 @@ bool HitTargetBody(target_data T, coordinates point, coordinates base_x, coordin
 	return res;
 }
 
-bool HitTargetWings(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+bool HitTargetWingsZX(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
 	bool res;
 	std::vector <coordinates> polygon_vertices;
 	coordinates temp;
 
-	temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
-	temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
-
-	polygon_vertices.push_back(temp);
-
-	temp.x = T.coord_n_obj.x + base_z.x * 0.825 + base_x.x * 0.825;
-	temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
-
-	polygon_vertices.push_back(temp);
-
-	temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
-	temp.z = T.coord_n_obj.z - base_z.z * 10.0 - base_x.z * 10.0;
-
-	polygon_vertices.push_back(temp);
-
-	temp.x = T.coord_n_obj.x - base_z.x * 0.825 - base_x.x * 0.825;
-	temp.z = T.coord_n_obj.z + base_z.z * 10.0 + base_x.z * 10.0;
-
-	polygon_vertices.push_back(temp);
-
-	res = CrossingNumberAlgo(polygon_vertices, point);
-
-	return res;
-}
-
-bool HitTargetEmpennage(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
-	bool res;
-	std::vector <coordinates> polygon_vertices;
-	coordinates temp;
-
-	temp.x = T.coord_n_obj.x - base_z.x * 3.0 - base_x.x * 3.0;
-	temp.z = T.coord_n_obj.z + base_z.z * 0.49 + base_x.z * 0.49;
-
+	temp.x = 0.0 + base_z.x * 0.825 + base_x.x * 0.825;
+	temp.z = 0.0 + base_z.z * 0.49 + base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //1
 
-	temp.x = T.coord_n_obj.x - base_z.x * 3.0 - base_x.x * 3.0;
-	temp.z = T.coord_n_obj.z - base_z.z * 0.49 - base_x.z * 0.49;
-
+	temp.x = 0.0 + base_z.x * 0.825 + base_x.x * 0.825;
+	temp.z = 0.0 - base_z.z * 0.49 - base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //2
 
-	temp.x = T.coord_n_obj.x - base_z.x * 3.6 - base_x.x * 3.6;
-	temp.z = T.coord_n_obj.z - base_z.z * 3.4 - base_x.z * 3.4;
-
+	temp.x = 0.0 + base_z.x * 0.365 + base_x.x * 0.365;
+	temp.z = 0.0 - base_z.z * 10.0 - base_x.z * 10.0;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //3
 
-	temp.x = T.coord_n_obj.x - base_z.x * 4.2 - base_x.x * 4.2;
-	temp.z = T.coord_n_obj.z - base_z.z * 3.4 - base_x.z * 3.4;
-
+	temp.x = 0.0 - base_z.x * 0.365 - base_x.x * 0.365;
+	temp.z = 0.0 - base_z.z * 10.0 - base_x.z * 10.0;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //4
 
-	temp.x = T.coord_n_obj.x - base_z.x * 4.2 - base_x.x * 4.2;
-	temp.z = T.coord_n_obj.z + base_z.z * 3.4 + base_x.z * 3.4;
-
+	temp.x = 0.0 - base_z.x * 0.825 - base_x.x * 0.825;
+	temp.z = 0.0 - base_z.z * 0.49 - base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //5
 
-	temp.x = T.coord_n_obj.x - base_z.x * 3.6 - base_x.x * 3.6;
-	temp.z = T.coord_n_obj.z + base_z.z * 3.4 + base_x.z * 3.4;
+	temp.x = 0.0 - base_z.x * 0.825 - base_x.x * 0.825;
+	temp.z = 0.0 + base_z.z * 0.49 + base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //6
 
+	temp.x = 0.0 - base_z.x * 0.365 - base_x.x * 0.365;
+	temp.z = 0.0 + base_z.z * 10.0 + base_x.z * 10.0;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //7
+
+	temp.x = 0.0 + base_z.x * 0.365 + base_x.x * 0.365;
+	temp.z = 0.0 + base_z.z * 10.0 + base_x.z * 10.0;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //8
+
+	res = CrossingNumberAlgo(polygon_vertices, point);
+
+	return res;
+}
+
+bool HitTargetEmpennageZX(target_data T, coordinates point, coordinates base_x, coordinates base_z) {
+	bool res;
+	std::vector <coordinates> polygon_vertices;
+	coordinates temp;
+
+	temp.x = 0.0 - base_z.x * 3.0 - base_x.x * 3.0;
+	temp.z = 0.0 + base_z.z * 0.49 + base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //1
+
+	temp.x = 0.0 - base_z.x * 3.0 - base_x.x * 3.0;
+	temp.z = 0.0 - base_z.z * 0.49 - base_x.z * 0.49;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //2
+
+	temp.x = 0.0 - base_z.x * 3.6 - base_x.x * 3.6;
+	temp.z = 0.0 - base_z.z * 3.4 - base_x.z * 3.4;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //3
+
+	temp.x = 0.0 - base_z.x * 4.2 - base_x.x * 4.2;
+	temp.z = 0.0 - base_z.z * 3.4 - base_x.z * 3.4;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //4
+
+	temp.x = 0.0 - base_z.x * 4.2 - base_x.x * 4.2;
+	temp.z = 0.0 + base_z.z * 3.4 + base_x.z * 3.4;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
+	polygon_vertices.push_back(temp); //5
+
+	temp.x = 0.0 - base_z.x * 3.6 - base_x.x * 3.6;
+	temp.z = 0.0 + base_z.z * 3.4 + base_x.z * 3.4;
+	temp = MakeRotation(temp, T.path_obj, 0.0);
+	temp.x += T.coord_n_obj.x;
+	temp.z += T.coord_n_obj.z;
 	polygon_vertices.push_back(temp); //6
 
 	res = CrossingNumberAlgo(polygon_vertices, point);
@@ -268,7 +331,7 @@ bool HitTargetBodyXY(target_data T, coordinates point, coordinates base_x, coord
 	return res;
 }
 
-bool HitTargetXZ(target_data T, coordinates point) {
+bool HitTargetZX(target_data T, coordinates point) {
 	bool res;
 	std::vector <coordinates> points;
 	coordinates base_x, base_z, temp;
@@ -281,18 +344,15 @@ bool HitTargetXZ(target_data T, coordinates point) {
 	base_z.y = 0.0;
 	base_z.z = 1.0;
 
-	base_x = MakeRotation(base_x, T.path_obj, T.pitch_obj);
-	base_z = MakeRotation(base_z, T.path_obj, T.pitch_obj);
 
 
-
-	res = HitTargetBody(T, point, base_x, base_z);
+	res = HitTargetBodyZX(T, point, base_x, base_z);
 
 	if (!res) 
-		res = HitTargetWings(T, point, base_x, base_z);
+		res = HitTargetWingsZX(T, point, base_x, base_z);
 
 	if (!res)
-		res = HitTargetEmpennage(T, point, base_x, base_z);
+		res = HitTargetEmpennageZX(T, point, base_x, base_z);
 
 	return res;
 }
