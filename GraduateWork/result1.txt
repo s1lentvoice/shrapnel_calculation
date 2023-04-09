@@ -1,0 +1,400 @@
+[0] set:
+avg fragments hit the target: 45
+missed: 0
+
+[1] set:
+avg fragments hit the target: 52
+missed: 0
+
+[2] set:
+avg fragments hit the target: 174
+missed: 0
+
+[3] set:
+avg fragments hit the target: 132
+missed: 0
+
+[4] set:
+avg fragments hit the target: 136
+missed: 0
+
+[5] set:
+avg fragments hit the target: 100
+missed: 0
+
+[6] set:
+avg fragments hit the target: 130
+missed: 0
+
+[7] set:
+avg fragments hit the target: 488
+missed: 0
+
+[8] set:
+avg fragments hit the target: 86
+missed: 0
+
+[9] set:
+avg fragments hit the target: 52
+missed: 0
+
+[10] set:
+avg fragments hit the target: 303
+missed: 0
+
+[11] set:
+avg fragments hit the target: 351
+missed: 0
+
+[12] set:
+avg fragments hit the target: 62
+missed: 0
+
+[13] set:
+avg fragments hit the target: 351
+missed: 0
+
+[14] set:
+avg fragments hit the target: 96
+missed: 0
+
+[15] set:
+avg fragments hit the target: 147
+missed: 0
+
+[16] set:
+avg fragments hit the target: 139
+missed: 0
+
+[17] set:
+avg fragments hit the target: 38
+missed: 0
+
+[18] set:
+avg fragments hit the target: 195
+missed: 0
+
+[19] set:
+avg fragments hit the target: 114
+missed: 0
+
+[20] set:
+avg fragments hit the target: 43
+missed: 0
+
+[21] set:
+avg fragments hit the target: 154
+missed: 0
+
+[22] set:
+avg fragments hit the target: 40
+missed: 0
+
+[23] set:
+avg fragments hit the target: 23
+missed: 0
+
+[24] set:
+avg fragments hit the target: 135
+missed: 0
+
+[25] set:
+avg fragments hit the target: 121
+missed: 0
+
+[26] set:
+avg fragments hit the target: 92
+missed: 0
+
+[27] set:
+avg fragments hit the target: 110
+missed: 0
+
+[28] set:
+avg fragments hit the target: 207
+missed: 0
+
+[29] set:
+avg fragments hit the target: 59
+missed: 0
+
+[30] set:
+avg fragments hit the target: 155
+missed: 0
+
+[31] set:
+avg fragments hit the target: 109
+missed: 0
+
+[32] set:
+avg fragments hit the target: 268
+missed: 0
+
+[33] set:
+avg fragments hit the target: 75
+missed: 0
+
+[34] set:
+avg fragments hit the target: 61
+missed: 0
+
+[35] set:
+avg fragments hit the target: 248
+missed: 0
+
+[36] set:
+avg fragments hit the target: 510
+missed: 0
+
+[37] set:
+avg fragments hit the target: 191
+missed: 0
+
+[38] set:
+avg fragments hit the target: 84
+missed: 0
+
+[39] set:
+avg fragments hit the target: 74
+missed: 0
+
+[40] set:
+avg fragments hit the target: 293
+missed: 0
+
+[41] set:
+avg fragments hit the target: 122
+missed: 0
+
+[42] set:
+avg fragments hit the target: 179
+missed: 0
+
+[43] set:
+avg fragments hit the target: 37
+missed: 0
+
+[44] set:
+avg fragments hit the target: 56
+missed: 0
+
+[45] set:
+avg fragments hit the target: 64
+missed: 0
+
+[46] set:
+avg fragments hit the target: 69
+missed: 0
+
+[47] set:
+avg fragments hit the target: 176
+missed: 0
+
+[48] set:
+avg fragments hit the target: 61
+missed: 0
+
+[49] set:
+avg fragments hit the target: 305
+missed: 0
+
+[50] set:
+avg fragments hit the target: 104
+missed: 0
+
+[51] set:
+avg fragments hit the target: 292
+missed: 0
+
+[52] set:
+avg fragments hit the target: 26
+missed: 0
+
+[53] set:
+avg fragments hit the target: 23
+missed: 0
+
+[54] set:
+avg fragments hit the target: 20
+missed: 0
+
+[55] set:
+avg fragments hit the target: 199
+missed: 0
+
+[56] set:
+avg fragments hit the target: 127
+missed: 0
+
+[57] set:
+avg fragments hit the target: 267
+missed: 0
+
+[58] set:
+avg fragments hit the target: 46
+missed: 0
+
+[59] set:
+avg fragments hit the target: 133
+missed: 0
+
+[60] set:
+avg fragments hit the target: 27
+missed: 0
+
+[61] set:
+avg fragments hit the target: 122
+missed: 0
+
+[62] set:
+avg fragments hit the target: 245
+missed: 0
+
+[63] set:
+avg fragments hit the target: 87
+missed: 0
+
+[64] set:
+avg fragments hit the target: 252
+missed: 0
+
+[65] set:
+avg fragments hit the target: 124
+missed: 0
+
+[66] set:
+avg fragments hit the target: 210
+missed: 0
+
+[67] set:
+avg fragments hit the target: 109
+missed: 0
+
+[68] set:
+avg fragments hit the target: 38
+missed: 0
+
+[69] set:
+avg fragments hit the target: 206
+missed: 0
+
+[70] set:
+avg fragments hit the target: 169
+missed: 0
+
+[71] set:
+avg fragments hit the target: 39
+missed: 0
+
+[72] set:
+avg fragments hit the target: 189
+missed: 0
+
+[73] set:
+avg fragments hit the target: 213
+missed: 0
+
+[74] set:
+avg fragments hit the target: 114
+missed: 0
+
+[75] set:
+avg fragments hit the target: 254
+missed: 0
+
+[76] set:
+avg fragments hit the target: 66
+missed: 0
+
+[77] set:
+avg fragments hit the target: 325
+missed: 0
+
+[78] set:
+avg fragments hit the target: 148
+missed: 0
+
+[79] set:
+avg fragments hit the target: 41
+missed: 0
+
+[80] set:
+avg fragments hit the target: 498
+missed: 0
+
+[81] set:
+avg fragments hit the target: 90
+missed: 0
+
+[82] set:
+avg fragments hit the target: 30
+missed: 0
+
+[83] set:
+avg fragments hit the target: 150
+missed: 0
+
+[84] set:
+avg fragments hit the target: 245
+missed: 0
+
+[85] set:
+avg fragments hit the target: 164
+missed: 0
+
+[86] set:
+avg fragments hit the target: 42
+missed: 0
+
+[87] set:
+avg fragments hit the target: 156
+missed: 0
+
+[88] set:
+avg fragments hit the target: 42
+missed: 0
+
+[89] set:
+avg fragments hit the target: 218
+missed: 0
+
+[90] set:
+avg fragments hit the target: 157
+missed: 0
+
+[91] set:
+avg fragments hit the target: 38
+missed: 0
+
+[92] set:
+avg fragments hit the target: 210
+missed: 0
+
+[93] set:
+avg fragments hit the target: 108
+missed: 0
+
+[94] set:
+avg fragments hit the target: 53
+missed: 0
+
+[95] set:
+avg fragments hit the target: 172
+missed: 0
+
+[96] set:
+avg fragments hit the target: 142
+missed: 0
+
+[97] set:
+avg fragments hit the target: 218
+missed: 0
+
+[98] set:
+avg fragments hit the target: 39
+missed: 0
+
+[99] set:
+avg fragments hit the target: 236
+missed: 0
+

@@ -19,7 +19,7 @@ int main() {
 	std::vector <raw_data> raw_dataset;
 	missile_data missile;
 	target_data target;
-	raw_data temp;
+	raw_data temp, a, b;
 	double FragmentsInitialSpeed = 7000.0;
 	int FragmentsQuantity = 1000;
 	coordinates base_x;
@@ -33,8 +33,10 @@ int main() {
 	
 	raw_dataset = MakeRawData(filename);
 
-	for (int k = 0; k < 100; k++) {
+	for (int k = 0; k < 8; k++) {
 		std::cout << "[" << k << "] set:" << std::endl << std::endl;
+
+		out << "[" << k << "] set:";
 
 		temp = raw_dataset[k];
 
@@ -63,7 +65,7 @@ int main() {
 		bar.set_todo_char(" ");
 		bar.set_done_char("#");
 
-		for (int j = 0; j < 10000; j++) {
+		for (int j = 0; j < 1000; j++) {
 			fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 			counter_near = 0;
 			double distance = 0.0;
@@ -98,16 +100,19 @@ int main() {
 
 			if (counter_near == 0)
 				counter_miss++;
-			if (counter == 100) {
+			if (counter == 10) {
 				counter = 0;
 				bar.update();
 			}
 			counter++;
 		}
-		avg_near = total_near / 10000;
+		avg_near = total_near / 1000;
 		std::cout << std::endl << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
 		std::cout << "missed: " << counter_miss << std::endl << std::endl;
 		std::cout << "avg to surface: " << counter_fragments_to_surface / 10000 << std::endl << std::endl;
+		
+		out << std::endl << "avg fragments hit the target: " << avg_near << std::endl;
+		out << "missed: " << counter_miss << std::endl << std::endl;
 	}
 	
 	//to_do_next
