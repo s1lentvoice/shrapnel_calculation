@@ -23,6 +23,7 @@ int main() {
 	double FragmentsInitialSpeed = 7000.0;
 	int FragmentsQuantity = 1000;
 	coordinates base_x;
+	velocity t_velo;
 
 	base_x.x = 1.0;
 	base_x.y = 0.0;
@@ -32,18 +33,35 @@ int main() {
 	std::ofstream out("output.txt");
 	
 	raw_dataset = MakeRawData(filename);
+	temp = raw_dataset[0];
+	int counter = 1;
+	double delay;
 
-	for (int k = 0; k < 8; k++) {
-		std::cout << "[" << k << "] set:" << std::endl << std::endl;
+	target = ModifyCoords(MakeDataTarget(temp), missile);
 
-		out << "[" << k << "] set:";
+	t_velo.x = target.v_obj;
 
-		temp = raw_dataset[k];
+	t_velo = MakeRotationVelo(t_velo, target.path_obj, target.pitch_obj);
 
+	std::cout << "x: " << t_velo.x << std::endl;
+	std::cout << "y: " << t_velo.y << std::endl;
+	std::cout << "z: " << t_velo.z << std::endl;
+
+	for (int k = 0; k < 183; ++k) {
+		//out << "[" << k << "] set:";
+		out << "[+" << k << " degrees] yaw angle:" << std::endl;
+		std::cout << "[+" << k << " degrees] yaw angle:" << std::endl;
+		//temp = raw_dataset[k];
 		missile = MakeDataMissile(temp);
+		//std::cout << missile.pitch_angle << " -> " << missile.pitch_angle + 12.0 << std::endl;
 		base_x = MakeRotation(base_x, missile.yaw_angle, missile.pitch_angle);
 		target = ModifyCoords(MakeDataTarget(temp), missile);
+		missile.yaw_angle += (double)k;
+		std::cout << "current angle: " << missile.yaw_angle << std::endl;
 		surface TargetSurfaceZX, TargetSurfaceXY, TargetSurfaceYZ;
+		coordinates zero;
+
+		std::cout << "distance: " << PointsDistance(target.coord_n_obj, zero) << std::endl;
 
 		TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
 		TargetSurfaceYZ = MakeTargetSurface(target.basis_x, target.coord_n_obj);
@@ -55,7 +73,7 @@ int main() {
 		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 		int total_near = 0;
 		double avg_near = 0.0;
-		int counter = 1;
+
 		int counter_near = 0;
 		int counter_miss = 0;
 		int counter_fragments_to_surface = 0;
@@ -65,7 +83,7 @@ int main() {
 		bar.set_todo_char(" ");
 		bar.set_done_char("#");
 
-		for (int j = 0; j < 1000; j++) {
+		for (int j = 0; j < 10000; j++) {
 			fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 			counter_near = 0;
 			double distance = 0.0;
@@ -100,19 +118,21 @@ int main() {
 
 			if (counter_near == 0)
 				counter_miss++;
-			if (counter == 10) {
+			if (counter == 100) {
 				counter = 0;
 				bar.update();
 			}
 			counter++;
 		}
-		avg_near = total_near / 1000;
-		std::cout << std::endl << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
-		std::cout << "missed: " << counter_miss << std::endl << std::endl;
-		std::cout << "avg to surface: " << counter_fragments_to_surface / 10000 << std::endl << std::endl;
+		avg_near = total_near / 10000;
+		std::cout << std::endl << "avg fragments hit the target: " << avg_near << std::endl << std::endl;
+		//std::cout << "missed: " << counter_miss << std::endl << std::endl;
+		//std::cout << "avg to surface: " << counter_fragments_to_surface / 10000 << std::endl << std::endl;
 		
-		out << std::endl << "avg fragments hit the target: " << avg_near << std::endl;
-		out << "missed: " << counter_miss << std::endl << std::endl;
+		out << avg_near << std::endl << std::endl;
+		//out << "missed: " << counter_miss << std::endl << std::endl;
+		//if (avg_near < EPS)
+			//break;
 	}
 	
 	//to_do_next

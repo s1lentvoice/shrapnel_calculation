@@ -79,6 +79,14 @@ struct velocity {
 
 		return *this;
 	}
+
+	velocity& operator-= (const auto& V) {
+		x -= V.x;
+		y -= V.y;
+		z -= V.z;
+
+		return *this;
+	}
 };
 
 velocity operator+ (velocity T1, velocity T2) {

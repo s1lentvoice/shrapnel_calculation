@@ -299,4 +299,14 @@ bool CrossingNumberAlgoXY(std::vector <coordinates> polygon_vertices, coordinate
 		return false;
 }
 
+coordinates MoveTarget(target_data T, velocity velo, double time) {
+	coordinates res;
+
+	res.x = T.coord_n_obj.x + time * velo.x;
+	res.y = T.coord_n_obj.y + time * velo.y;
+	res.z = T.coord_n_obj.z + time * velo.z;
+
+	return res;
+}
+
 #endif
