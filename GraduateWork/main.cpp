@@ -17,6 +17,8 @@ int main() {
 	std::vector <raw_data> data;
 	std::vector <fragment> fragments;
 	std::vector <raw_data> raw_dataset;
+	std::vector <int> raw_results = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	std::vector <int> raw_results_missed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	missile_data missile;
 	target_data target;
 	raw_data temp, a, b;
@@ -36,7 +38,7 @@ int main() {
 	temp = raw_dataset[0];
 	int counter = 1;
 	double delay;
-
+	
 	// start
 	missile = MakeDataMissile(temp);
 	//missile.yaw_angle = 75.0;
@@ -50,19 +52,21 @@ int main() {
 
 	TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
 	TargetSurfaceXY = MakeTargetSurface(target.basis_z, target.coord_n_obj);
-	std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
+	//std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
 	coordinates point;
 	fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
 	for (unsigned i = 0; i < fragments.size(); ++i) {
-		if (fragments[i].hitZX) {
-			point = PointOfImpact(fragments[i], TargetSurfaceZX);
+		if (fragments[i].hitXY) {
+			point = PointOfImpact(fragments[i], TargetSurfaceXY);
 			//distance = PointsDistance(point, target.coord_n_obj);
 
-			out << "(" << point.z << ", " << point.x << ")" << std::endl;
+			out << "(" << point.x << ", " << point.y << ")" << std::endl;
 		}
 	}
 	std::cout << counter;
 	//end
+	
+	
 
 	for (int k = 0; k < 100; ++k) {
 		//out << "[" << k << "] set:";
@@ -81,7 +85,7 @@ int main() {
 		//std::cout << "distance: " << PointsDistance(target.coord_n_obj, zero) << std::endl;
 
 		TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
-		TargetSurfaceYZ = MakeTargetSurface(target.basis_x, target.coord_n_obj);
+		//TargetSurfaceYZ = MakeTargetSurface(target.basis_x, target.coord_n_obj);
 		TargetSurfaceXY = MakeTargetSurface(target.basis_z, target.coord_n_obj);
 
 		//std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;

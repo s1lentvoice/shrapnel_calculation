@@ -172,10 +172,16 @@ unsigned HitTargetXY(target_data T, coordinates point) {
 	res = HitTargetBodyXY(T, point);
 
 	if (!res)
-		HitTargetEmpennageXYupper(T, point);
+		res = HitTargetEmpennageXYupper(T, point);
 
 	if (!res)
-		HitTargetEmpennageXYlower(T, point);
+		res = HitTargetEmpennageXYlower(T, point);
+
+	if (!res)
+		res = HitTargetCamXY(T, point);
+
+	if (!res)
+		res = HitTargetPropXY(T, point);
 
 	return res;
 }

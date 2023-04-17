@@ -39,7 +39,6 @@ std::vector <raw_data> MakeRawData(std::string filename) {
 
 		res.push_back(temp);
 	}
-	
 	return res;
 }
 
