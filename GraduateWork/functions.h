@@ -15,13 +15,13 @@ coordinates MakeRotation(auto T, double phi, double theta) {
 	phi = phi * std::numbers::pi_v<double> / 180.0;
 	theta = theta * std::numbers::pi_v<double> / 180.0;
 
-	res_temp.z = std::cos(phi) * T.z - std::sin(phi) * T.x;
-	res_temp.x = std::sin(phi) * T.z + std::cos(phi) * T.x;
-	res_temp.y = T.y;
+	res_temp.x = std::cos(theta) * T.x - std::sin(theta) * T.y;
+	res_temp.y = std::sin(theta) * T.x + std::cos(theta) * T.y;
+	res_temp.z = T.z;
 
-	res.x = std::cos(theta) * res_temp.x - std::sin(theta) * res_temp.y;
-	res.y = std::sin(theta) * res_temp.x + std::cos(theta) * res_temp.y;
-	res.z = res_temp.z;
+	res.z = std::cos(phi) * res_temp.z + std::sin(phi) * res_temp.x;
+	res.x = -(std::sin(phi)) * res_temp.z + std::cos(phi) * res_temp.x;
+	res.y = res_temp.y;
 
 	return res;
 }
@@ -32,13 +32,14 @@ velocity MakeRotationVelo(auto T, double phi, double theta) {
 	phi = phi * std::numbers::pi_v<double> / 180.0;
 	theta = theta * std::numbers::pi_v<double> / 180.0;
 
-	res_temp.z = std::cos(phi) * T.z - std::sin(phi) * T.x;
-	res_temp.x = std::sin(phi) * T.z + std::cos(phi) * T.x;
-	res_temp.y = T.y;
+	res_temp.x = std::cos(theta) * T.x - std::sin(theta) * T.y;
+	res_temp.y = std::sin(theta) * T.x + std::cos(theta) * T.y;
+	res_temp.z = T.z;
 
-	res.x = std::cos(theta) * res_temp.x - std::sin(theta) * res_temp.y;
-	res.y = std::sin(theta) * res_temp.x + std::cos(theta) * res_temp.y;
-	res.z = res_temp.z;
+	res.z = std::cos(phi) * res_temp.z + std::sin(phi) * res_temp.x;
+	res.x = -(std::sin(phi)) * res_temp.z + std::cos(phi) * res_temp.x;
+	res.y = res_temp.y;
+
 
 	return res;
 }

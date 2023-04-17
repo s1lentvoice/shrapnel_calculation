@@ -81,10 +81,12 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 
 	for (int i = 0; i < N; ++i) {
+		frag.hitXY = false;
+		frag.hitZX = false;
 		frag.mass = 0.1;
 
 		coord.x = distibX(generator);
-		phi = 2 * std::numbers::pi_v<double> *distibPhi(generator);
+		phi = 2 * std::numbers::pi_v<double> * distibPhi(generator);
 		coord.y = M.r * std::sin(phi);
 		coord.z = M.r * std::cos(phi);
 
@@ -94,7 +96,7 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 		frag.coord = coord;
 		frag.velo = velo;
-
+		//std::cout << frag.velo.x << " " << frag.velo.y << " " << frag.velo.z << std::endl;
 		if (AngleBetweenVectors(frag.velo, T.basis_z) < 0.0)
 			frag.hitXY = true;
 
@@ -141,52 +143,39 @@ bool IsInRectangle(std::vector <coordinates> polygon_vertices, coordinates point
 }
 
 
-bool HitTargetZX(target_data T, coordinates point) {
-	bool res;
-	std::vector <coordinates> points;
-	coordinates base_x, base_z, temp;
+unsigned HitTargetZX(target_data T, coordinates point) {
+	unsigned res = 0;
 
-	base_x.x = 1.0;
-	base_x.y = 0.0;
-	base_x.z = 0.0;
-
-	base_z.x = 0.0;
-	base_z.y = 0.0;
-	base_z.z = 1.0;
-
-
-
-	res = HitTargetBodyZX(T, point, base_x, base_z);
+	res = HitTargetBodyZX(T, point);
 
 	if (!res) 
-		res = HitTargetWingsZX(T, point, base_x, base_z);
+		res = HitTargetWingsZX(T, point);
 
 	if (!res)
-		res = HitTargetEmpennageZX(T, point, base_x, base_z);
+		res = HitTargetEmpennageZX(T, point);
+
+	if (!res)
+		res = HitTargetLargeRocketLeftZX(T, point);
+
+	if (!res)
+		res = HitTargetLargeRocketRightZX(T, point);
+
+	if (!res)
+		res = HitTargetPropZX(T, point);
 
 	return res;
 }
 
-bool HitTargetXY(target_data T, coordinates point) {
-	bool res;
-	std::vector <coordinates> points;
-	coordinates base_x, base_y, temp;
+unsigned HitTargetXY(target_data T, coordinates point) {
+	unsigned res = 0;
 
-	base_x.x = 1.0;
-	base_x.y = 0.0;
-	base_x.z = 0.0;
-
-	base_y.x = 0.0;
-	base_y.y = 1.0;
-	base_y.z = 0.0;
-
-	res = HitTargetBodyXY(T, point, base_x, base_y);
+	res = HitTargetBodyXY(T, point);
 
 	if (!res)
-		HitTargetEmpennageXYupper(T, point, base_x, base_y);
+		HitTargetEmpennageXYupper(T, point);
 
 	if (!res)
-		HitTargetEmpennageXYlower(T, point, base_x, base_y);
+		HitTargetEmpennageXYlower(T, point);
 
 	return res;
 }

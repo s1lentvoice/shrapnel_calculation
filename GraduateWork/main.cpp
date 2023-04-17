@@ -37,40 +37,56 @@ int main() {
 	int counter = 1;
 	double delay;
 
+	// start
+	missile = MakeDataMissile(temp);
+	//missile.yaw_angle = 75.0;
+	//missile.pitch_angle = 45.0;
 	target = ModifyCoords(MakeDataTarget(temp), missile);
 
-	t_velo.x = target.v_obj;
+	surface TargetSurfaceZX, TargetSurfaceXY, TargetSurfaceYZ;
+	coordinates zero;
 
-	t_velo = MakeRotationVelo(t_velo, target.path_obj, target.pitch_obj);
+	//std::cout << "distance: " << PointsDistance(target.coord_n_obj, zero) << std::endl;
 
-	std::cout << "x: " << t_velo.x << std::endl;
-	std::cout << "y: " << t_velo.y << std::endl;
-	std::cout << "z: " << t_velo.z << std::endl;
+	TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
+	TargetSurfaceXY = MakeTargetSurface(target.basis_z, target.coord_n_obj);
+	std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
+	coordinates point;
+	fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
+	for (unsigned i = 0; i < fragments.size(); ++i) {
+		if (fragments[i].hitZX) {
+			point = PointOfImpact(fragments[i], TargetSurfaceZX);
+			//distance = PointsDistance(point, target.coord_n_obj);
 
-	for (int k = 0; k < 183; ++k) {
+			out << "(" << point.z << ", " << point.x << ")" << std::endl;
+		}
+	}
+	std::cout << counter;
+	//end
+
+	for (int k = 0; k < 100; ++k) {
 		//out << "[" << k << "] set:";
-		out << "[+" << k << " degrees] yaw angle:" << std::endl;
-		std::cout << "[+" << k << " degrees] yaw angle:" << std::endl;
-		//temp = raw_dataset[k];
+		out << "[" << k + 1<< "] set:" << std::endl;
+		std::cout << "[" << k + 1 << "] set:" << std::endl;
+		temp = raw_dataset[k];
 		missile = MakeDataMissile(temp);
 		//std::cout << missile.pitch_angle << " -> " << missile.pitch_angle + 12.0 << std::endl;
-		base_x = MakeRotation(base_x, missile.yaw_angle, missile.pitch_angle);
+		
 		target = ModifyCoords(MakeDataTarget(temp), missile);
-		missile.yaw_angle += (double)k;
-		std::cout << "current angle: " << missile.yaw_angle << std::endl;
+		//missile.yaw_angle += (double)k;
+		//std::cout << "current angle: " << missile.yaw_angle << std::endl;
 		surface TargetSurfaceZX, TargetSurfaceXY, TargetSurfaceYZ;
 		coordinates zero;
 
-		std::cout << "distance: " << PointsDistance(target.coord_n_obj, zero) << std::endl;
+		//std::cout << "distance: " << PointsDistance(target.coord_n_obj, zero) << std::endl;
 
 		TargetSurfaceZX = MakeTargetSurface(target.basis_y, target.coord_n_obj);
 		TargetSurfaceYZ = MakeTargetSurface(target.basis_x, target.coord_n_obj);
 		TargetSurfaceXY = MakeTargetSurface(target.basis_z, target.coord_n_obj);
 
-		std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
+		//std::cout << TargetSurfaceZX.A << "x + " << TargetSurfaceZX.B << "y + " << TargetSurfaceZX.C << "z + " << TargetSurfaceZX.D << " = 0" << std::endl;
 
-		std::cout << TargetSurfaceXY.A << "x + " << TargetSurfaceXY.B << "y + " << TargetSurfaceXY.C << "z + " << TargetSurfaceXY.D << " = 0" << std::endl;
-		fragments = MakeFragments(missile, target, FragmentsInitialSpeed, FragmentsQuantity);
+		//std::cout << TargetSurfaceXY.A << "x + " << TargetSurfaceXY.B << "y + " << TargetSurfaceXY.C << "z + " << TargetSurfaceXY.D << " = 0" << std::endl;
 		int total_near = 0;
 		double avg_near = 0.0;
 
@@ -89,7 +105,7 @@ int main() {
 			double distance = 0.0;
 			coordinates point;
 
-			for (unsigned int i = 0; i < fragments.size(); ++i) {
+			for (unsigned i = 0; i < fragments.size(); ++i) {
 				if (fragments[i].hitZX && !fragments[i].calculated) {
 					point = PointOfImpact(fragments[i], TargetSurfaceZX);
 					//distance = PointsDistance(point, target.coord_n_obj);
