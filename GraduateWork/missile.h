@@ -77,7 +77,7 @@ std::vector <fragment> MakeFragments(missile_data M, target_data T, double Initi
 
 	target = MakeRotationVelo(target, T.path_obj, T.pitch_obj);
 
-	additional += target;
+	additional -= target;
 
 
 	for (int i = 0; i < N; ++i) {
